@@ -51,27 +51,36 @@ classdef SatelliteInfo
     end
     methods (Access = private)
         function downloadSatteliteInfoFile(obj)
+            serverURL = 'ftp.aiub.unibe.ch';
+            serverPath = 'BSWUSER52/GEN';
             warning('Satellite info file "%s" will be downloaded!',obj.satInfoFile);
 
-            % Actual file download
-            %try
+            % mget method (Matlab FTP connection)
+            try
                 % Open FTP server connection and change to directory
-                serverURL = 'ftp.aiub.unibe.ch';
                 server = ftp(serverURL);
-                cd(server,'BSWUSER52/GEN');
+                cd(server,serverPath);
                 mget(server,obj.satInfoFile);
                 if ~strcmp(pwd(),obj.satInfoLocalFolder)
                     movefile(fullfile(pwd(),obj.satInfoFile),fullfile(obj.satInfoLocalFolder,obj.satInfoFile));
                 end
+                fprintf('File "%s" downloaded successfully!\n',obj.satInfoFile);
+                return
+            catch
+                warning('Download failed via "mget" method!');
+            end
             
-                % For https (maybe FTP will be switched off in near future)
-                %satelliteInfoFile = 'SATELLIT.I14';
-                %satelliteInfoURL = ['ftp://ftp.aiub.unibe.ch/BSWUSER52/GEN/',satelliteInfoFile];
-                %websave(satelliteInfoURL,satelliteInfoFile);
-            %catch
-            %    error('Failed to download satellite info file "%s" from "%s"!\nPlease download file manually to folder: "%s"',...
-            %        obj.satInfoFile,serverURL,obj.satInfoLocalFolder);
-            %end
+            % curl command (call system command)
+            curlCommand = sprintf('curl %s/%s/%s --output %s',serverURL,serverPath,obj.satInfoFile,...
+                    fullfile(obj.satInfoLocalFolder,obj.satInfoFile));
+            fprintf('curl command: "%s"\n',curlCommand);
+            [status,cmdOut] = system(curlCommand);
+            if status == 0
+                fprintf('File "%s" downloaded successfully!\n',obj.satInfoFile);
+            else
+                warning('Download failed via "curl" method!');
+                fprintf('%s\n',cmdOut);
+            end           
         end
         function updateInfoFileIfNeeded(obj)
             if exist(fullfile(obj.satInfoLocalFolder,obj.satInfoFile),'file')
