@@ -54,7 +54,7 @@ classdef SatelliteInfo
             warning('Satellite info file "%s" will be downloaded!',obj.satInfoFile);
 
             % Actual file download
-            try
+            %try
                 % Open FTP server connection and change to directory
                 serverURL = 'ftp.aiub.unibe.ch';
                 server = ftp(serverURL);
@@ -68,10 +68,10 @@ classdef SatelliteInfo
                 %satelliteInfoFile = 'SATELLIT.I14';
                 %satelliteInfoURL = ['ftp://ftp.aiub.unibe.ch/BSWUSER52/GEN/',satelliteInfoFile];
                 %websave(satelliteInfoURL,satelliteInfoFile);
-            catch
-                error('Failed to download satellite info file "%s" from "%s"!\nPlease download file manually to folder: "%s"',...
-                    obj.satInfoFile,serverURL,obj.satInfoLocalFolder);
-            end
+            %catch
+            %    error('Failed to download satellite info file "%s" from "%s"!\nPlease download file manually to folder: "%s"',...
+            %        obj.satInfoFile,serverURL,obj.satInfoLocalFolder);
+            %end
         end
         function updateInfoFileIfNeeded(obj)
             if exist(fullfile(obj.satInfoLocalFolder,obj.satInfoFile),'file')
