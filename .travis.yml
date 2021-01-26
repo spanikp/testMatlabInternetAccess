@@ -1,0 +1,11 @@
+os:
+  - linux
+
+env:
+  jobs:
+    - USE_NETWORK=true
+
+language: matlab
+matlab:
+  - latest
+script: matlab -batch "results = runtests('IncludeSubfolders',true); assertSuccess(results);"
