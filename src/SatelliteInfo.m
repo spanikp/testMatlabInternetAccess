@@ -71,16 +71,7 @@ classdef SatelliteInfo
             end
             
             % curl command (call system command)
-            curlCommand = sprintf('curl %s/%s/%s --output %s',serverURL,serverPath,obj.satInfoFile,...
-                    fullfile(obj.satInfoLocalFolder,obj.satInfoFile));
-            fprintf('curl command: "%s"\n',curlCommand);
-            [status,cmdOut] = system(curlCommand);
-            if status == 0
-                fprintf('File "%s" downloaded successfully!\n',obj.satInfoFile);
-            else
-                warning('Download failed via "curl" method!');
-                fprintf('%s\n',cmdOut);
-            end           
+            curlDownload(fullfile(serverURL,serverPath,obj.satInfoFile),fullfile(obj.satInfoLocalFolder,obj.satInfoFile));
         end
         function updateInfoFileIfNeeded(obj)
             if exist(fullfile(obj.satInfoLocalFolder,obj.satInfoFile),'file')
