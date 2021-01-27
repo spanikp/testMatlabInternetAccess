@@ -1,6 +1,8 @@
 os:
   - linux
 
+sudo: required
+
 env:
   jobs:
     - USE_NETWORK=true
