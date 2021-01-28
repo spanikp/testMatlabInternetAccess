@@ -10,10 +10,6 @@ env:
 before_install:
   - sudo apt-get install -y curl
 
-language: matlab
-
-matlab:
-  - latest
-
 script:
   - echo "Printing TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}"
+  - curl ftp://ftp.aiub.unibe.ch/BSWUSER52/GEN/SATELLIT.I14 --output ${TRAVIS_BUILD_DIR}/src/SATELLIT.I14
