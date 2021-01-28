@@ -16,4 +16,4 @@ matlab:
   - latest
 
 script:
-  - matlab -batch "results = runtests('IncludeSubfolders',true); assertSuccess(results);"
+  - echo "Printing TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}"
