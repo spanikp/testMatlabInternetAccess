@@ -3,6 +3,11 @@ os:
 
 sudo: required
 
+language: matlab
+
+matlab:
+  - latest
+
 env:
   jobs:
     - USE_NETWORK=true
@@ -11,5 +16,5 @@ before_install:
   - sudo apt-get install -y curl
 
 script:
-  - echo "Printing TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}"
-  - curl http://ftp.aiub.unibe.ch/BSWUSER52/GEN/SATELLIT.I14 --output ${TRAVIS_BUILD_DIR}/src/SATELLIT.I14
+  - matlab -batch "results = runtests('IncludeSubfolders',true); assertSuccess(results);"
+

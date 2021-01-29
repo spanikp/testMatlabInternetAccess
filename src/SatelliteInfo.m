@@ -51,27 +51,34 @@ classdef SatelliteInfo
     end
     methods (Access = private)
         function downloadSatteliteInfoFile(obj)
-            serverURL = 'ftp.aiub.unibe.ch';
-            serverPath = 'BSWUSER52/GEN';
             warning('Satellite info file "%s" will be downloaded!',obj.satInfoFile);
-
-            % mget method (Matlab FTP connection)
+            remoteFileURL = ['http://ftp.aiub.unibe.ch/BSWUSER52/GEN/',obj.satInfoFile];
             try
-                % Open FTP server connection and change to directory
-                server = ftp(serverURL);
-                cd(server,serverPath);
-                mget(server,obj.satInfoFile);
-                if ~strcmp(pwd(),obj.satInfoLocalFolder)
-                    movefile(fullfile(pwd(),obj.satInfoFile),fullfile(obj.satInfoLocalFolder,obj.satInfoFile));
-                end
-                fprintf('File "%s" downloaded successfully!\n',obj.satInfoFile);
-                return
+                websave(fullfile(obj.satInfoLocalFolder,obj.satInfoFile),remoteFileURL);
             catch
-                warning('Download failed via "mget" method!');
+                error('Satellite info file "%s" cannot be downloaded! Download file manually and place it to: "%s"',...
+                    obj.satInfoFile,obj.satInfoLocalFolder);
             end
             
-            % curl command (call system command)
-            curlDownload(fullfile(serverURL,serverPath,obj.satInfoFile),fullfile(obj.satInfoLocalFolder,obj.satInfoFile));
+            % % mget method (Matlab FTP connection) - old
+            % serverURL = 'ftp.aiub.unibe.ch';
+            % serverPath = 'BSWUSER52/GEN';
+            % try
+            %     % Open FTP server connection and change to directory
+            %     server = ftp(serverURL);
+            %     cd(server,serverPath);
+            %     mget(server,obj.satInfoFile);
+            %     if ~strcmp(pwd(),obj.satInfoLocalFolder)
+            %         movefile(fullfile(pwd(),obj.satInfoFile),fullfile(obj.satInfoLocalFolder,obj.satInfoFile));
+            %     end
+            %     fprintf('File "%s" downloaded successfully!\n',obj.satInfoFile);
+            %     return
+            % catch
+            %     warning('Download failed via "mget" method!');
+            % end
+            
+            % % curl command (call system command)
+            % curlDownload(fullfile(serverURL,serverPath,obj.satInfoFile),fullfile(obj.satInfoLocalFolder,obj.satInfoFile));
         end
         function updateInfoFileIfNeeded(obj)
             if exist(fullfile(obj.satInfoLocalFolder,obj.satInfoFile),'file')
