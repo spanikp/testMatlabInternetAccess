@@ -12,4 +12,4 @@ before_install:
 
 script:
   - echo "Printing TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}"
-  - curl ftp://ftp.aiub.unibe.ch/BSWUSER52/GEN/SATELLIT.I14 --output ${TRAVIS_BUILD_DIR}/src/SATELLIT.I14
+  - curl http://ftp.aiub.unibe.ch/BSWUSER52/GEN/SATELLIT.I14 --output ${TRAVIS_BUILD_DIR}/src/SATELLIT.I14
